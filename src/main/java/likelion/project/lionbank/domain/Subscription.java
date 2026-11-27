@@ -22,7 +22,7 @@ public class Subscription {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "account_id")
-    private Accoint account;
+    private Account account;
 
     @Column(nullable = false)
     private String productName;
