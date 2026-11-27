@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+// ApiResponse import 추가 예정
 
 @RestController
 @RequestMapping("/api/subscriptions")
@@ -16,6 +17,7 @@ public class SubscriptionController {
 
     private final SubscriptionService subscriptionService;
 
+    // Subscription 생성 endpoint
     @PostMapping
     public ApiResponse<Long> createSubscription(@Valid @RequestBody SubscriptionRequest req) {
         return ApiResponse.ok(subscriptionService.create(req));
