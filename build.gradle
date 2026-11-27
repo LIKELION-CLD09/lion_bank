@@ -22,7 +22,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-webmvc'
-	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.10.0'
+	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:3.2.1'
 
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'com.mysql:mysql-connector-j'
@@ -36,6 +36,31 @@ dependencies {
 	testAnnotationProcessor 'org.projectlombok:lombok'
 }
 
-tasks.named('test') {
-	useJUnitPlatform()
+def frontendDir = "$projectDir/frontend"
+
+def isWindows = System.getProperty('os.name')
+		.toLowerCase(Locale.ROOT)
+		.contains('windows')
+
+tasks.register('installReact', Exec) {
+	workingDir frontendDir
+	group = 'build'
+
+	commandLine(isWindows ? 'npm.cmd' : 'npm', 'install')
+}
+
+tasks.register('buildReact', Exec) {
+	dependsOn 'installReact'
+	workingDir frontendDir
+	group = 'build'
+
+	commandLine(isWindows ? 'npm.cmd' : 'npm', 'run', 'build')
+}
+
+tasks.named('processResources') {
+	dependsOn 'buildReact'
+
+	from("$frontendDir/build") {
+		into 'static'
+	}
 }
