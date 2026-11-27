@@ -2,6 +2,7 @@ package likelion.project.lionbank.service;
 
 import likelion.project.lionbank.domain.Subscription;
 import likelion.project.lionbank.dto.SubscriptionRequest;
+import likelion.project.lionbank.repository.SubscriptionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,5 +37,4 @@ public class SubscriptionService {
         if (!"ACTIVE".equals(account.getStatus())) throw new IllegalStateException("활성화되지 않은 계좌입니다.");
         return account;
     }
-
 }
