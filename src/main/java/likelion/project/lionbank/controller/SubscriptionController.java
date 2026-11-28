@@ -4,6 +4,8 @@ import jakarta.validation.Valid;
 import likelion.project.lionbank.dto.SubscriptionRequest;
 import likelion.project.lionbank.service.SubscriptionService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,7 +21,8 @@ public class SubscriptionController {
 
     // Subscription 생성 endpoint
     @PostMapping
-    public ApiResponse<Long> createSubscription(@Valid @RequestBody SubscriptionRequest req) {
-        return ApiResponse.ok(subscriptionService.create(req));
+    public ApiResponse<Long> createSubscription(@Valid @RequestBody SubscriptionRequest req,
+                                                @AuthenticationPrincipal UserDetails user) {
+        return ApiResponse.ok(subscriptionService.create(req, user.getUsername()));
     }
 }
