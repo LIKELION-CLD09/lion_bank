@@ -1,22 +1,21 @@
 package likelion.project.lionbank.dto;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.Getter;
 
 @Getter
 public class SubscriptionRequest {
 
-    @NotBlank
-    private long accountId;
+    @NotNull
+    private Long accountId;
 
     @NotBlank
     @Size(max=100)
     private String productName;
 
-    @NotBlank
-    private long amount;
+    @NotNull @Positive
+    private Long amount;
 
-    @NotBlank
-    private int billingAnchorDate;
+    @NotNull @Min(1) @Max(31)
+    private Integer billingAnchorDate;
 }
