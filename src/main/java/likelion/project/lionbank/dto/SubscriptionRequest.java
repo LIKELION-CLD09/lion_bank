@@ -12,7 +12,7 @@ public class SubscriptionRequest {
 
     @NotBlank
     @Size(max=100)
-    private String product_name;
+    private String productName;
 
     @NotBlank
     private long amount;

@@ -23,7 +23,7 @@ public class SubscriptionService {
         Account account = checkAccount(req.getAccountId());
         Subscription subscription = Subscription.builder()
                 .account(account)
-                .productName(req.getProduct_name())
+                .productName(req.getProductName())
                 .amount(req.getAmount())
                 .billingAnchorDate(req.getBillingAnchorDate())
                 .build();
