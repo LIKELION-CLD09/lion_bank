@@ -33,7 +33,7 @@ public class SubscriptionService {
         return subscriptionRepository.save(subscription).getId();
     }
 
-    // ACTIVE 상태의 존재하는 계좌인지 확인하는 메서드
+    // 본인의 계좌인지, ACTIVE 상태의 존재하는 계좌인지 확인하는 메서드
     private Account checkAccount(long accountId, String username) {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new NotFoundException("사용자를 찾을 수 없습니다."));
