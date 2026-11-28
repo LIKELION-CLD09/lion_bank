@@ -2,6 +2,7 @@ package likelion.project.lionbank.service;
 
 import likelion.project.lionbank.domain.Subscription;
 import likelion.project.lionbank.dto.SubscriptionRequest;
+import likelion.project.lionbank.dto.SubscriptionUpdateRequest;
 import likelion.project.lionbank.repository.SubscriptionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -33,6 +34,24 @@ public class SubscriptionService {
         return subscriptionRepository.save(subscription).getId();
     }
 
+    // Subscription 수정 메서드
+    @Transactional
+    public void update(long subscriptionId, SubscriptionUpdateRequest req, String username) {
+        Subscription subscription = checkSubscription(subscriptionId, username);
+        if (req.getAccountId() != null) {
+            subscription.setAccount(checkAccount(req.getAccountId(), username));
+        }
+        if (req.getProductName() != null) {
+            subscription.setProductName(req.getProductName());
+        }
+        if (req.getAmount() != null) {
+            subscription.setAmount(req.getAmount());
+        }
+        if (req.getBillingAnchorDate() != null) {
+            subscription.setBillingAnchorDate(req.getBillingAnchorDate());
+        }
+    }
+
     // 본인의 계좌인지, ACTIVE 상태의 존재하는 계좌인지 확인하는 메서드
     private Account checkAccount(long accountId, String username) {
         User user = userRepository.findByUsername(username)
@@ -42,5 +61,16 @@ public class SubscriptionService {
         if (!account.getUser().getId().equals(user.getId())) throw new ForbiddenException("본인 계좌가 아닙니다.");
         if (!"ACTIVE".equals(account.getStatus())) throw new IllegalArgumentException("활성화되지 않은 계좌입니다.");
         return account;
+    }
+
+    // 해당 정기 구독이 사용자의 정기 구독인지 확인하는 메서드
+    private Subscription checkSubscription(long subscriptionId, String username) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new NotFoundException("사용자를 찾을 수 없습니다."));
+        Subscription subscription = subscriptionRepository.findById(subscriptionId)
+                .orElseThrow(() -> new NotFoundException("정기 구독을 찾을 수 없습니다."));
+        if (!subscription.getAccount().getUser().getId().equals(user.getId())) throw new ForbiddenException("본인의 구독이 아닙니다.");
+        if (!"ACTIVE".equals(subscription.getStatus())) throw new IllegalArgumentException("삭제된 정기 구독입니다.");
+        return subscription;
     }
 }
