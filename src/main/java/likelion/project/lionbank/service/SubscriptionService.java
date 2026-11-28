@@ -2,12 +2,15 @@ package likelion.project.lionbank.service;
 
 import likelion.project.lionbank.domain.Subscription;
 import likelion.project.lionbank.dto.SubscriptionRequest;
+import likelion.project.lionbank.dto.SubscriptionResponse;
 import likelion.project.lionbank.dto.SubscriptionUpdateRequest;
 import likelion.project.lionbank.repository.SubscriptionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import likelion.project.lionbank.common.exception.*;
+
+import java.util.List;
 // AccountRepository import 추가 예정
 // UserRepository import 추가 예정
 // Account Entity import 추가 예정
@@ -56,6 +59,15 @@ public class SubscriptionService {
     @Transactional
     public void delete(long subscriptionId, String username) {
         checkSubscription(subscriptionId, username).setStatus("DELETED");
+    }
+
+    // Subscription 목록 조회 메서드
+    @Transactional(readOnly = true)
+    public List<SubscriptionResponse> getList(String username) {
+        return subscriptionRepository.findByAccountUserUsernameAndStatus(username, "ACTIVE")
+                .stream()
+                .map(SubscriptionResponse::new)
+                .toList();
     }
 
     // 본인의 계좌인지, ACTIVE 상태의 존재하는 계좌인지 확인하는 메서드
