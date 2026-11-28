@@ -6,9 +6,9 @@ import likelion.project.lionbank.repository.SubscriptionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import likelion.project.lionbank.common.exception.*;
 // AccountRepository import 추가 예정
 // Account Entity import 추가 예정
-// 전역 예외 처리 import 추가 예정
 
 @Service
 @RequiredArgsConstructor
