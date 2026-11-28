@@ -52,6 +52,12 @@ public class SubscriptionService {
         }
     }
 
+    // Subscription 삭제 메서드
+    @Transactional
+    public void delete(long subscriptionId, String username) {
+        checkSubscription(subscriptionId, username).setStatus("DELETED");
+    }
+
     // 본인의 계좌인지, ACTIVE 상태의 존재하는 계좌인지 확인하는 메서드
     private Account checkAccount(long accountId, String username) {
         User user = userRepository.findByUsername(username)

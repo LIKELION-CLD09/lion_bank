@@ -32,4 +32,12 @@ public class SubscriptionController {
         subscriptionService.update(subscriptionId, req, user.getUsername());
         return ApiResponse.ok(null);
     }
+
+    // Subscription 삭제 endpoint
+    @DeleteMapping("/{subscriptionId}")
+    public ApiResponse<Void> deleteSubscription(@PathVariable Long subscriptionId,
+                                                @AuthenticationPrincipal UserDetails user) {
+        subscriptionService.delete(subscriptionId, user.getUsername());
+        return ApiResponse.ok(null);
+    }
 }
